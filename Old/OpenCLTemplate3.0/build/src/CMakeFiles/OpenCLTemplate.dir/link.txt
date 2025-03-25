@@ -1,1 +1,0 @@
-/usr/bin/c++ -O3 -DNDEBUG   -m64    CMakeFiles/OpenCLTemplate.dir/OpenCLTemplate.cpp.o CMakeFiles/OpenCLTemplate.dir/OpenCLTemplateMain.cpp.o CMakeFiles/OpenCLTemplate.dir/Timer.cpp.o -o ../bin/x86_64/Release/OpenCLTemplate  -Wl,-rpath,/mnt/c/Users/root/source/repos/OpenCLTemplate3.0/lib /mnt/c/Users/root/source/repos/OpenCLTemplate3.0/lib/libOpenCL.so -lrt 

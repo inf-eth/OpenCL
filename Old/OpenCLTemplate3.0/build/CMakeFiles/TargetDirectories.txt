@@ -1,6 +1,0 @@
-/mnt/c/Users/root/source/repos/OpenCLTemplate3.0/build/CMakeFiles/edit_cache.dir
-/mnt/c/Users/root/source/repos/OpenCLTemplate3.0/build/CMakeFiles/rebuild_cache.dir
-/mnt/c/Users/root/source/repos/OpenCLTemplate3.0/build/src/CMakeFiles/OpenCLTemplate.dir
-/mnt/c/Users/root/source/repos/OpenCLTemplate3.0/build/src/CMakeFiles/run.dir
-/mnt/c/Users/root/source/repos/OpenCLTemplate3.0/build/src/CMakeFiles/edit_cache.dir
-/mnt/c/Users/root/source/repos/OpenCLTemplate3.0/build/src/CMakeFiles/rebuild_cache.dir
