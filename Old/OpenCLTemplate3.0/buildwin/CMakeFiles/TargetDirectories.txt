@@ -1,0 +1,3 @@
+C:/Users/root/source/repos/OpenCLTemplate3.0/buildwin/CMakeFiles/ALL_BUILD.dir
+C:/Users/root/source/repos/OpenCLTemplate3.0/buildwin/CMakeFiles/ZERO_CHECK.dir
+C:/Users/root/source/repos/OpenCLTemplate3.0/buildwin/src/CMakeFiles/OpenCLTemplate.dir

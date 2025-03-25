@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="C:\Users\root\source\repos\OpenCLTemplate3.0\src\OpenCLTemplate.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\root\source\repos\OpenCLTemplate3.0\src\OpenCLTemplateMain.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\root\source\repos\OpenCLTemplate3.0\src\Timer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="C:\Users\root\source\repos\OpenCLTemplate3.0\include\OpenCLTemplate.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\root\source\repos\OpenCLTemplate3.0\include\Timer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\root\source\repos\OpenCLTemplate3.0\src\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="C:\Users\root\source\repos\OpenCLTemplate3.0\src\OpenCLTemplate_Kernels.cl" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{5E6C8484-B44F-396E-89B9-BEEA702853CD}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{A884B169-6F41-38EA-B636-3121BC940F16}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

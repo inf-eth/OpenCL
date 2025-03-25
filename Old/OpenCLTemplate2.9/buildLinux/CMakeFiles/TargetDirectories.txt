@@ -1,0 +1,4 @@
+/mnt/c/Users/root/source/repos/OpenCLTemplate2.9/buildLinux/CMakeFiles/OpenCLTemplate.dir
+/mnt/c/Users/root/source/repos/OpenCLTemplate2.9/buildLinux/CMakeFiles/run.dir
+/mnt/c/Users/root/source/repos/OpenCLTemplate2.9/buildLinux/CMakeFiles/edit_cache.dir
+/mnt/c/Users/root/source/repos/OpenCLTemplate2.9/buildLinux/CMakeFiles/rebuild_cache.dir

@@ -1,0 +1,3 @@
+C:/Users/root/source/repos/OpenCL/MatrixMultiplicationNaiveGPU/buildwin/CMakeFiles/ALL_BUILD.dir
+C:/Users/root/source/repos/OpenCL/MatrixMultiplicationNaiveGPU/buildwin/CMakeFiles/ZERO_CHECK.dir
+C:/Users/root/source/repos/OpenCL/MatrixMultiplicationNaiveGPU/buildwin/src/CMakeFiles/MatrixMultiplicationNaiveGPU.dir

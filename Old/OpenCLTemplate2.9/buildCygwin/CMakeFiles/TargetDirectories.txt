@@ -1,0 +1,4 @@
+/cygdrive/c/Users/root/source/repos/OpenCLTemplate2.9/buildCygwin/CMakeFiles/OpenCLTemplate.dir
+/cygdrive/c/Users/root/source/repos/OpenCLTemplate2.9/buildCygwin/CMakeFiles/run.dir
+/cygdrive/c/Users/root/source/repos/OpenCLTemplate2.9/buildCygwin/CMakeFiles/edit_cache.dir
+/cygdrive/c/Users/root/source/repos/OpenCLTemplate2.9/buildCygwin/CMakeFiles/rebuild_cache.dir
