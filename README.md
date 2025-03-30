@@ -1,6 +1,6 @@
 # OpenCL Wrapper Templates for GPU Programming
 These are modified templates that use the original OpenCL-Wrapper as the base. Key changes are:
-- CMake support: Now you use cmake to build these templates.
+- CMake support: Now you can use cmake to build these templates.
 - Reverted to the original way of copying the kernels.cl to the executable folder. I felt that kernel.cpp file was very cumbersome to get around when using #defines.
 - Fixed an iterator going out of bound for debug configuration.
 - Added options to create 2D and 3D kernels. See main.cpp of OpenCLWrapper to see how this works.
@@ -122,7 +122,7 @@ Use-case example: [FluidX3D](https://github.com/ProjectPhysX/FluidX3D) builds en
   - Windows 10 SDK
   - Open [`.sln'] file in the [`VS2022'] folder
 - If using cmake, download and install cmake for windows
-- Within cmake gui, set the source path to point to the root of OpenCLWrapper (or the template you want to use) (this is the directory containing a CMakeLists.txt and other directories like src, include, lib and docs.
+- Within cmake gui, set the source path to point to the root of OpenCLWrapper (or the template you want to use) which is the directory containing a CMakeLists.txt and other directories like src, include, lib and docs.
 - Create a folder called [`build'] in the OpenCLWrapper root folder.
 - Within cmake gui, set the build path to point to the OpenCLWrapperRoot/build
 - Configure, generate and open project within cmake gui or from the build directory.
