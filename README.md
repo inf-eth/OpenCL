@@ -3,8 +3,10 @@ These are modified templates that use the original OpenCL-Wrapper as the base. K
 - CMake support: Now you can use cmake to build these templates.
 - Reverted to the original way of copying the kernels.cl to the executable folder. I felt that kernel.cpp file was very cumbersome to get around when using #defines.
 - Fixed an iterator going out of bound for debug configuration.
-- Added options to create 2D and 3D kernels. See main.cpp of OpenCLWrapper to see how this works.
+- Added overloaded 2D and 3D kernels. See main.cpp of OpenCLWrapper to see how this works.
 - Added a Visual Studio 2022 solution/project folder for windows systems without cmake.
+## Credit
+Original creater of OpenCL-wrapper Lehmann Moritz. The original project can be found at: https://github.com/ProjectPhysX/OpenCL-Wrapper
 
 # OpenCL-Wrapper
 OpenCL is the most powerful programming language ever created. Yet the OpenCL C++ bindings are cumbersome and the code overhead prevents many people from getting started.
