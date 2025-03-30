@@ -117,16 +117,16 @@ The original wrapper was modified to allow multi-dimentional kernels with a cmak
   - Windows 10 SDK
 - Download and install cmake for windows
 - Within cmake gui, set the source path to point to the root of OpenCLWrapper (this is the directory containing a CMakeLists.txt and other directories like src, include, lib and docs.
-- Create a folder called [`build'] in the OpenCLWrapper root folder.
-- Within cmake gui, set the build path to point to the OpenCLWrapperRoot/build
+- Create a folder called [`build'] in the OpenCLWrapperSimple root folder.
+- Within cmake gui, set the build path to point to the OpenCLWrapperSimpleRoot/build
 - Configure, generate and open project within cmake gui or from the build directory.
-- Open [`OpenCLWrapper.sln`](OpenCLWrapper.sln) in [Visual Studio Community](https://visualstudio.microsoft.com/de/vs/community/).
+- Open [`OpenCLWrapperSimple.sln`](OpenCLWrapperSimple.sln) in [Visual Studio Community](https://visualstudio.microsoft.com/de/vs/community/).
 - Compile and run by clicking the <kbd>► Local Windows Debugger</kbd> button.
 
 </details>
 <details><summary>Compiling on Linux / macOS / Android (click to expand section)</summary>
 
-- Within the OpenCLWrapper directory, compile and run with:
+- Within the OpenCLWrapperSimple directory, compile and run with:
   ```bash
   mkdir build
   cd build

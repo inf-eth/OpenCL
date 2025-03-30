@@ -103,7 +103,7 @@ Use-case example: [FluidX3D](https://github.com/ProjectPhysX/FluidX3D) builds en
   </details>
 
 </details>
-
+### Original wrapper template
 &#9656;[Download](https://github.com/ProjectPhysX/OpenCL-Wrapper/archive/refs/heads/master.zip)+unzip the source code or `git clone https://github.com/ProjectPhysX/OpenCL-Wrapper.git`
 
 <details><summary>Compiling on Windows (click to expand section)</summary>
@@ -113,17 +113,17 @@ Use-case example: [FluidX3D](https://github.com/ProjectPhysX/FluidX3D) builds en
   - MSVC v142
   - Windows 10 SDK
 - Download and install cmake for windows
-- Within cmake gui, set the source path to point to the root of OpenCLWrapper (this is the directory containing a CMakeLists.txt and other directories like src, include, lib and docs.
-- Create a folder called [`build'] in the OpenCLWrapper root folder.
+- Within cmake gui, set the source path to point to the root of OpenCLMatMult (this is the directory containing a CMakeLists.txt and other directories like src, include, lib and docs.
+- Create a folder called [`build'] in the OpenCLMatMult root folder.
 - Within cmake gui, set the build path to point to the OpenCLWrapperRoot/build
 - Configure, generate and open project within cmake gui or from the build directory.
-- Open [`OpenCLWrapper.sln`](OpenCLWrapper.sln) in [Visual Studio Community](https://visualstudio.microsoft.com/de/vs/community/).
+- Open [`OpenCLMatMult.sln`](OpenCLMatMult.sln) in [Visual Studio Community](https://visualstudio.microsoft.com/de/vs/community/).
 - Compile and run by clicking the <kbd>► Local Windows Debugger</kbd> button.
 
 </details>
 <details><summary>Compiling on Linux / macOS / Android (click to expand section)</summary>
 
-- Within the OpenCLWrapper directory, compile and run with:
+- Within the OpenCLMatMult directory, compile and run with:
   ```bash
   mkdir build
   cd build
