@@ -6,6 +6,18 @@
 //#define PTX
 //#define LOG
 
+// Workaround for noexcept in VS2013
+// ref: https://stackoverflow.com/questions/18387640/how-to-deal-with-noexcept-in-visual-studio
+#ifdef _WIN32
+#ifndef no_except_work_around_H
+#define no_except_work_around_H
+#if (_MSC_VER <= 1800)
+#include <xkeycheck.h>
+#define noexcept
+#endif
+#endif //no_except_work_around_H
+#endif
+
 #ifndef _WIN32
 #pragma GCC diagnostic ignored "-Wignored-attributes" // ignore compiler warnings for CL/cl.hpp with g++
 #endif // _WIN32
