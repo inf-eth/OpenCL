@@ -84,8 +84,9 @@ int main()
 	// ================================= OpenCL Mat Mult =========================================
 	// kernel that runs on the device
 	Kernel MatMultKernel(device, rA*cB, "MatMultKernel", gpuC, A, B, rA, cA, rB, cB);	// 1 D Kernel
-	Kernel MatMultKernel2D(device, rA, cB, "MatMultKernel2D", gpuC, A, B, rA, cA, rB, cB);	// 2 D Kernel
-	//Kernel MatMultKernel2D(device, rA, cB, true, 8, "MatMultKernel2D", gpuC, A, B, rA, cA, rB, cB);	// 2 D Kernel explicit workgroup size
+	Kernel MatMultKernel2D(device, rA, cB, "MatMultKernel2D", gpuC, A, B, rA, cA, rB, cB);
+	//Kernel MatMultKernel2D(device, rA, cB, true, 1, 128, "MatMultKernel2D", gpuC, A, B, rA, cA, rB, cB);	// 2 D Kernel explicit ND workgroup sizes
+	//Kernel MatMultKernel2D(device, rA, cB, true, 8, "MatMultKernel2D", gpuC, A, B, rA, cA, rB, cB);	// 2 D Kernel explicit workgroup size (assumes same workgroup size for each dimension)
 
 	print_info("Value before kernel execution: C[0] = "+to_string(gpuC[0]));
 

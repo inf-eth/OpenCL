@@ -691,11 +691,25 @@ public:
 		set_ranges(N1, N2, dummy, (ulong)workgroup_size);
 		cl_queue = device.get_cl_queue();
 	}
+	template<class... T> inline Kernel(const Device& device, const ulong N1, const ulong N2, bool dummy, const uint workgroup_size1, const uint workgroup_size2, const string& name, const T&... parameters) { // accepts Memory<T> objects and fundamental data type constants
+		if(!device.is_initialized()) print_error("No OpenCL Device selected. Call Device constructor.");
+		cl_kernel = cl::Kernel(device.get_cl_program(), name.c_str());
+		link_parameters(0u, parameters...); // expand variadic template to link kernel parameters
+		set_ranges(N1, N2, dummy, (ulong)workgroup_size1, (ulong)workgroup_size2);
+		cl_queue = device.get_cl_queue();
+	}
 	template<class... T> inline Kernel(const Device& device, const ulong N1, const ulong N2, const ulong N3, bool dummy, const uint workgroup_size, const string& name, const T&... parameters) { // accepts Memory<T> objects and fundamental data type constants
 		if(!device.is_initialized()) print_error("No OpenCL Device selected. Call Device constructor.");
 		cl_kernel = cl::Kernel(device.get_cl_program(), name.c_str());
 		link_parameters(0u, parameters...); // expand variadic template to link kernel parameters
 		set_ranges(N1, N2, N3, dummy, (ulong)workgroup_size);
+		cl_queue = device.get_cl_queue();
+	}
+	template<class... T> inline Kernel(const Device& device, const ulong N1, const ulong N2, const ulong N3, bool dummy, const uint workgroup_size1, const uint workgroup_size2, const uint workgroup_size3, const string& name, const T&... parameters) { // accepts Memory<T> objects and fundamental data type constants
+		if(!device.is_initialized()) print_error("No OpenCL Device selected. Call Device constructor.");
+		cl_kernel = cl::Kernel(device.get_cl_program(), name.c_str());
+		link_parameters(0u, parameters...); // expand variadic template to link kernel parameters
+		set_ranges(N1, N2, N3, dummy, (ulong)workgroup_size1, (ulong)workgroup_size2, (ulong)workgroup_size3);
 		cl_queue = device.get_cl_queue();
 	}
 	inline Kernel() {} // default constructor
@@ -711,10 +725,22 @@ public:
 		cl_range_local = cl::NDRange(workgroup_size, workgroup_size);
 		return *this;
 	}
+	inline Kernel& set_ranges(const ulong N1, const ulong N2, bool dummy, const ulong workgroup_size1, const ulong workgroup_size2) {
+		this->N = N1*N2;
+		cl_range_global = cl::NDRange(((N1+workgroup_size1-1ull)/workgroup_size1)*workgroup_size1, ((N2+workgroup_size2-1ull)/workgroup_size2)*workgroup_size2); // make global range a multiple of local range
+		cl_range_local = cl::NDRange(workgroup_size1, workgroup_size2);
+		return *this;
+	}
 	inline Kernel& set_ranges(const ulong N1, const ulong N2, const ulong N3, bool dummy, const ulong workgroup_size=(ulong)WORKGROUP_SIZE3D) {
 		this->N = N1*N2*N3;
 		cl_range_global = cl::NDRange(((N1+workgroup_size-1ull)/workgroup_size)*workgroup_size, ((N2+workgroup_size-1ull)/workgroup_size)*workgroup_size, ((N3+workgroup_size-1ull)/workgroup_size)*workgroup_size); // make global range a multiple of local range
 		cl_range_local = cl::NDRange(workgroup_size, workgroup_size, workgroup_size);
+		return *this;
+	}
+	inline Kernel& set_ranges(const ulong N1, const ulong N2, const ulong N3, bool dummy, const ulong workgroup_size1, const ulong workgroup_size2, const ulong workgroup_size3) {
+		this->N = N1*N2*N3;
+		cl_range_global = cl::NDRange(((N1+workgroup_size1-1ull)/workgroup_size1)*workgroup_size1, ((N2+workgroup_size2-1ull)/workgroup_size2)*workgroup_size2, ((N3+workgroup_size3-1ull)/workgroup_size3)*workgroup_size3); // make global range a multiple of local range
+		cl_range_local = cl::NDRange(workgroup_size1, workgroup_size2, workgroup_size3);
 		return *this;
 	}
 	inline const ulong range() const { return N; }
