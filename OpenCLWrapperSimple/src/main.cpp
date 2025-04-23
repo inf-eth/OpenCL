@@ -4,7 +4,7 @@ int main()
 {
 	// compile OpenCL C code for the fastest available device
 	//Device device(select_device_with_most_flops(), "kernels.cl");
-	Device device(select_device_with_id(2), "kernels.cl");	// This is useful if you want a particular device
+	Device device(select_device_with_id(0), "kernels.cl");	// This is useful if you want a particular device
 
 	// size of vectors
 	const uint N = 1024u;
