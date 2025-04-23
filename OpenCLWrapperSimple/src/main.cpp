@@ -38,7 +38,7 @@ int main()
 	add_kernel.run();
 
 	// copy data from device memory to host memory
-	//C.read_from_device();
+	C.read_from_device();
 
 	print_info("Value after kernel execution: C[0] = "+to_string(C[0]));
 
