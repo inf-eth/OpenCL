@@ -39,8 +39,9 @@ void matMultOACC(TYPE*, TYPE*, TYPE*, int, int, int, int);
 int main()
 {
 	vector<Device_Info> test;
-	// compile OpenCL C code for the device with the given id
-	Device device(select_device_with_id(0), "MatMult_Kernels.cl");
+	// compile OpenCL C code for the device(s) with the given id(s)
+	Device device(select_device_with_id(1), "MatMult_Kernels.cl");
+	Device device1(select_device_with_id(2), "MatMult_Kernels.cl");
 
 	// size of vectors
 	int rA = 1024;
@@ -48,21 +49,37 @@ int main()
 	int rB = cA;
 	int cB = 1024;
 
+	// OpenCL time (ms) single device
+	float dev1Time = 375.f;
+	float dev2Time = 172.f;
+	// OffSetI is the row index that partitions C
+	// for workload between the two devices
+	int OffSetI = (int)((float)rA*dev2Time/(dev1Time+dev2Time));
+
 	// allocate memory on both host and device
 	Memory<TYPE> A(device, rA*cA, 1);
 	Memory<TYPE> B(device, rB*cB, 1);
 	Memory<TYPE> C(device, rA*cB, 1);
 	Memory<TYPE> gpuC(device, rA*cB, 1);
 
+	Memory<TYPE> A1(device1, rA*cA, 1);
+	Memory<TYPE> B1(device1, rB*cB, 1);
+	Memory<TYPE> C1(device1, rA*cB, 1);
+	Memory<TYPE> gpuC1(device1, rA*cB, 1);
+
+	Memory<TYPE> gpuCSum(device, rA*cB, 1);
+
 	// initialise memory
 	initialiseMat(A.data(), rA, cA);
 	initialiseMat(B.data(), rB, cB);
+	initialiseMat(A1.data(), rA, cA);
+	initialiseMat(B1.data(), rB, cB);
 
 	displayMat(A.data(),rA,cA);
 	displayMat(B.data(),rB,cB);
 
 	Clock.Start();
-	//matMult(C.data(),A.data(),B.data(),rA,cA,rB,cB);
+	matMult(C.data(),A.data(),B.data(),rA,cA,rB,cB);
 	Clock.Stop();
 	//cout << "Time taken (single): " << Clock.ElapsedTime() << " ms." << endl;
 	print_info("Time taken (single): "+to_string(Clock.ElapsedTime(), 3)+" ms.");
@@ -70,7 +87,7 @@ int main()
 	displayMat(C.data(),rA,cB);
 
 	Clock.Start();
-	//matMultOMP(C.data(),A.data(),B.data(),rA,cA,rB,cB);
+	matMultOMP(C.data(),A.data(),B.data(),rA,cA,rB,cB);
 	Clock.Stop();
 	print_info("Time taken (OMP): "+to_string(Clock.ElapsedTime(), 3)+" ms.");
 
@@ -81,81 +98,57 @@ int main()
 	print_info("Time taken (OACC): "+to_string(Clock.ElapsedTime(), 3)+" ms.");
 	#endif
 
+	print_info("Row partition index for Multi-device: "+to_string(OffSetI));
 	// ================================= OpenCL Mat Mult =========================================
-	#define BLKI 8	// workgroup size X/row/I
-	#define BLKJ 8	// workgroup size Y/col/J
-	localMemory<TYPE> lA(BLKI*BLKJ);
-	localMemory<TYPE> lB(BLKI*BLKJ);
-	// kernel that runs on the device
-	Kernel MatMultKernel(device, rA*cB, "MatMultKernel", gpuC, A, B, rA, cA, rB, cB);	// 1 D Kernel
-	Kernel MatMultKernel2D(device, rA, cB, true, BLKI, BLKJ, "MatMultKernel2D", gpuC, A, B, rA, cA, rB, cB);	// 2 D Kernel
-	Kernel MatMultKernel2DLocal(device, rA, cB, true, BLKI, BLKJ, "MatMultKernel2DLocal", gpuC, A, B, rA, cA, rB, cB);//, BLKI, BLKJ, lA, lB);
-	Kernel MatMultKernel2DLocalPass(device, rA, cB, true, BLKI, BLKJ, "MatMultKernel2DLocalPass", gpuC, A, B, rA, cA, rB, cB, BLKI, BLKJ, lA, lB);
-	//Kernel MatMultKernel2D(device, rA, cB, true, 8, "MatMultKernel2D", gpuC, A, B, rA, cA, rB, cB);	// 2 D Kernel explicit workgroup size
-
-	print_info("Value before kernel execution: C[0] = "+to_string(gpuC[0]));
-
-	for (int i=0; i<10; i++)
-	{
+	print_info("Value before kernel execution: gpuCSum[0] = "+to_string(gpuCSum[0]));
 	Clock.Start();
-	// copy data from host memory to device memory
-	A.write_to_device();
-	B.write_to_device();
-	// run add_kernel on the device
-	//MatMultKernel.run();
-	MatMultKernel2D.run();
-	//MatMultKernel2DLocal.run();
-	//MatMultKernel2DLocalPass.run();
-	// copy data from device memory to host memory
-	gpuC.read_from_device();
+	#pragma omp parallel num_threads(2)
+	{
+		#define BLKI 16	// workgroup size X/row/I
+		#define BLKJ 16	// workgroup size Y/col/J
+		// kernel that runs on the device
+		//Kernel MatMultKernel(device, rA*cB, "MatMultKernel", gpuC, A, B, rA, cA, rB, cB);	// 1 D Kernel
+		if (omp_get_thread_num()==0)
+		{
+			Kernel MatMultKernelMulti2D(device, OffSetI, cB, true, BLKI, BLKJ, "MatMultKernelMulti2D", gpuC, A, B, rA, cA, rB, cB, 0);	// 2 D Kernel
+			// copy data from host memory to device memory
+			A.write_to_device();
+			B.write_to_device();
+			// run add_kernel on the device
+			MatMultKernelMulti2D.run();
+			// copy data from device memory to host memory
+			gpuC.read_from_device();
+			// =========================================================================================
+		}
+		else
+		{
+			Kernel MatMultKernelMulti2D(device1,rA - OffSetI,cB,true,BLKI,BLKJ,"MatMultKernelMulti2D",gpuC1,A1,B1,rA,cA,rB,cB,OffSetI);	// 2 D Kernel
+			// copy data from host memory to device memory
+			A1.write_to_device();
+			B1.write_to_device();
+			// run add_kernel on the device
+			MatMultKernelMulti2D.run();
+			// copy data from device memory to host memory
+			gpuC1.read_from_device();
+			// =========================================================================================
+		}
+	}
 	Clock.Stop();
-	//print_info("Time taken (OpenCL): "+to_string(Clock.ElapsedTime(), 3)+" ms.");
-	cout << "Time taken (OpenCL): " << Clock.ElapsedTime() << " ms." << endl;
-	// =========================================================================================
-	}
-	cout << "======= shared pass ========" << endl;
-	for (int i=0; i<0; i++)
-	{
-		Clock.Start();
-		// copy data from host memory to device memory
-		A.write_to_device();
-		B.write_to_device();
-		// run add_kernel on the device
-		//MatMultKernel.run();
-		//MatMultKernel2D.run();
-		MatMultKernel2DLocalPass.run();
-		//MatMultKernel2DLocalPass.run();
-		// copy data from device memory to host memory
-		gpuC.read_from_device();
-		Clock.Stop();
-		//print_info("Time taken (OpenCL): "+to_string(Clock.ElapsedTime(), 3)+" ms.");
-		cout << "Time taken (OpenCL): " << Clock.ElapsedTime() << " ms." << endl;
-		// =========================================================================================
-	}
-	cout << "============ Shared local ============" << endl;
-	for (int i=0; i<10; i++)
-	{
-		Clock.Start();
-		// copy data from host memory to device memory
-		A.write_to_device();
-		B.write_to_device();
-		// run add_kernel on the device
-		//MatMultKernel.run();
-		//MatMultKernel2D.run();
-		MatMultKernel2DLocal.run();
-		//MatMultKernel2DLocalPass.run();
-		// copy data from device memory to host memory
-		gpuC.read_from_device();
-		Clock.Stop();
-		//print_info("Time taken (OpenCL): "+to_string(Clock.ElapsedTime(), 3)+" ms.");
-		cout << "Time taken (OpenCL): " << Clock.ElapsedTime() << " ms." << endl;
-		// =========================================================================================
-	}
+	print_info("Time taken (OpenCL): "+to_string(Clock.ElapsedTime(), 3)+" ms.");
+	//cout << "Time taken (OpenCLMulti): " << Clock.ElapsedTime() << " ms." << endl;
+
+	// Combining the resultant arrays (gpuC and gpuC1)
+	// from both devices
+	for (int i=0; i<rA; i++)
+		for (int j=0; j<cB; j++)
+			gpuCSum[j+cB*i] = i<OffSetI ? gpuC[j+cB*i] : gpuC1[j+cB*i];
 
 	displayMat(gpuC.data(),rA,cB);
+	displayMat(gpuC1.data(),rA,cB);
+	displayMat(gpuCSum.data(),rA,cB);
 
-	print_info("CPU and GPU diff: "+to_string(diffMat(C.data(),gpuC.data(),rA,cB)));
-	print_info("Value after kernel execution: C[0] = "+to_string(gpuC[0]));
+	print_info("CPU and GPU diff: "+to_string(diffMat(C.data(),gpuCSum.data(),rA,cB)));
+	print_info("Value after kernel execution: gpuCSum[0] = "+to_string(gpuCSum[0]));
 	
 	//wait();
 	return 0;

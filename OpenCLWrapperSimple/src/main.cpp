@@ -4,7 +4,7 @@ int main()
 {
 	// compile OpenCL C code for the fastest available device
 	//Device device(select_device_with_most_flops(), "kernels.cl");
-	Device device(select_device_with_id(0), "kernels.cl");	// This is useful if you want a particular device
+	Device device(select_device_with_id(1), "kernels.cl");	// This is useful if you want a particular device
 
 	// size of vectors
 	const uint N = 1024u;
@@ -13,6 +13,7 @@ int main()
 	Memory<float> B(device, N);
 	Memory<float> C(device, N);
 	float x = 5;
+	
 
 	// kernel that runs on the device
 	Kernel add_kernel(device, N, "add_kernel", A, B, C, x);
@@ -25,7 +26,7 @@ int main()
 	{
 		A[n] = 3.0f;
 		B[n] = 2.0f;
-		C[n] = 1.0f;
+		C[0] = 0.f;
 	}
 
 	print_info("Value before kernel execution: C[0] = "+to_string(C[0]));
@@ -40,7 +41,7 @@ int main()
 	// copy data from device memory to host memory
 	C.read_from_device();
 
-	print_info("Value after kernel execution: C[0] = "+to_string(C[0]));
+	print_info("Value after kernel execution: C[0] = "+to_string(C[0],2));
 
 	//wait();	// Might need this if executing directly from exe
 	return 0;

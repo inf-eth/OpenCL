@@ -18,19 +18,36 @@ kernel void MatMultKernel(global TYPE* C, global TYPE* A, global TYPE* B, int rA
 	C(i,j) = Sum;
 }
 
+kernel void MatMultKernelMulti2D(global TYPE* C, global TYPE* A, global TYPE* B, int rA, int cA, int rB, int cB, const int OffsetI)
+{
+	const uint i = get_global_id(0)+OffsetI;
+	const uint j = get_global_id(1);
+
+	if (i<rA && j<cB)
+	{
+		TYPE Sum = 0;
+		for (int k=0; k<cA; k++)
+			Sum = Sum + A(i,k)* B(k,j);
+		C(i,j) = Sum;
+	}
+}
+
 kernel void MatMultKernel2D(global TYPE* C, global TYPE* A, global TYPE* B, int rA, int cA, int rB, int cB)
 {
 	const uint i = get_global_id(0);
 	const uint j = get_global_id(1);
 
-	TYPE Sum = 0;
-	for (int k=0; k<cA; k++)
-		Sum = Sum + A(i,k)* B(k,j);
-	C(i,j) = Sum;
+	if (i<rA && j<cB)
+	{
+		TYPE Sum = 0;
+		for (int k=0; k<cA; k++)
+			Sum = Sum + A(i,k)* B(k,j);
+		C(i,j) = Sum;
+	}
 }
 
-#define BLKI 8
-#define BLKJ 8
+#define BLKI 16
+#define BLKJ 16
 kernel void MatMultKernel2DLocal(global TYPE* C, global TYPE* A, global TYPE* B, int rA, int cA, int rB, int cB)//, const int BLKI, const int BLKJ, local TYPE* lA, local TYPE* lB)
 {
 	const uint i = get_global_id(0);
