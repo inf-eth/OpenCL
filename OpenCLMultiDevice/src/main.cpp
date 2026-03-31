@@ -51,7 +51,7 @@ int main()
 
 	// OpenCL time (ms) single device
 	float dev1Time = 375.f;
-	float dev2Time = 172.f;
+	float dev2Time = 180.f;
 	// OffSetI is the row index that partitions C
 	// for workload between the two devices
 	int OffSetI = (int)((float)rA*dev2Time/(dev1Time+dev2Time));
@@ -101,6 +101,8 @@ int main()
 	print_info("Row partition index for Multi-device: "+to_string(OffSetI));
 	// ================================= OpenCL Mat Mult =========================================
 	print_info("Value before kernel execution: gpuCSum[0] = "+to_string(gpuCSum[0]));
+	for (int i=0; i<10; i++)
+	{
 	Clock.Start();
 	#pragma omp parallel num_threads(2)
 	{
@@ -136,7 +138,7 @@ int main()
 	Clock.Stop();
 	print_info("Time taken (OpenCL): "+to_string(Clock.ElapsedTime(), 3)+" ms.");
 	//cout << "Time taken (OpenCLMulti): " << Clock.ElapsedTime() << " ms." << endl;
-
+	}
 	// Combining the resultant arrays (gpuC and gpuC1)
 	// from both devices
 	for (int i=0; i<rA; i++)

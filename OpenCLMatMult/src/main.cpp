@@ -40,7 +40,7 @@ int main()
 {
 	vector<Device_Info> test;
 	// compile OpenCL C code for the device with the given id
-	Device device(select_device_with_id(0), "MatMult_Kernels.cl");
+	Device device(select_device_with_id(1), "MatMult_Kernels.cl");
 
 	// size of vectors
 	int rA = 1024;
@@ -62,7 +62,7 @@ int main()
 	displayMat(B.data(),rB,cB);
 
 	Clock.Start();
-	//matMult(C.data(),A.data(),B.data(),rA,cA,rB,cB);
+	matMult(C.data(),A.data(),B.data(),rA,cA,rB,cB);
 	Clock.Stop();
 	//cout << "Time taken (single): " << Clock.ElapsedTime() << " ms." << endl;
 	print_info("Time taken (single): "+to_string(Clock.ElapsedTime(), 3)+" ms.");
@@ -70,20 +70,20 @@ int main()
 	displayMat(C.data(),rA,cB);
 
 	Clock.Start();
-	//matMultOMP(C.data(),A.data(),B.data(),rA,cA,rB,cB);
+	matMultOMP(C.data(),A.data(),B.data(),rA,cA,rB,cB);
 	Clock.Stop();
 	print_info("Time taken (OMP): "+to_string(Clock.ElapsedTime(), 3)+" ms.");
-
+	return 0;
 	#ifdef __linux__
 	Clock.Start();
-	//matMultOACC(C.data(),A.data(),B.data(),rA,cA,rB,cB);
+	matMultOACC(C.data(),A.data(),B.data(),rA,cA,rB,cB);
 	Clock.Stop();
 	print_info("Time taken (OACC): "+to_string(Clock.ElapsedTime(), 3)+" ms.");
 	#endif
 
 	// ================================= OpenCL Mat Mult =========================================
-	#define BLKI 8	// workgroup size X/row/I
-	#define BLKJ 8	// workgroup size Y/col/J
+	#define BLKI 16	// workgroup size X/row/I
+	#define BLKJ 16	// workgroup size Y/col/J
 	localMemory<TYPE> lA(BLKI*BLKJ);
 	localMemory<TYPE> lB(BLKI*BLKJ);
 	// kernel that runs on the device
